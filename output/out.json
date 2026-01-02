@@ -5,9 +5,9 @@
     "title": "A website to destroy all websites",
     "url": "https://henry.codes/writing/a-website-to-destroy-all-websites/",
     "hn_comments_url": "https://news.ycombinator.com/item?id=46457784",
-    "points": 227,
+    "points": 240,
     "author": "g0xA52A2A",
-    "comments_count": 120,
+    "comments_count": 130,
     "top_comment": "I think the comments here are a great example of why this idea always sounds better in nostalgic reminiscence than in practice: As I write this, nearly half of the comments here are complaining about this website. There are complaints about requiring JavaScript, the font size, the design, the color choices, the animations. Complaints about everything the designer did to make this site unique and personal, which was the entire point of the exercise. This is coming from a site that supposedly attracts the target audience for this type of page.reply"
   },
   {
@@ -16,20 +16,75 @@
     "title": "Can Bundler be as fast as uv?",
     "url": "https://tenderlovemaking.com/2025/12/29/can-bundler-be-as-fast-as-uv/",
     "hn_comments_url": "https://news.ycombinator.com/item?id=46458302",
-    "points": 87,
+    "points": 92,
     "author": "ibobev",
-    "comments_count": 37,
+    "comments_count": 43,
     "top_comment": "I appreciate that Aaron is focusing on the practical algorithm/design improvements that could be made to Bundler, vs. prematurely going all in on \"rewrite in Rust\".reply"
   },
   {
     "rank": 3,
+    "id": "46456797",
+    "title": "Finland detains ship and its crew after critical undersea cable damaged",
+    "url": "https://www.cnn.com/2025/12/31/europe/finland-estonia-undersea-cable-ship-detained-intl",
+    "hn_comments_url": "https://news.ycombinator.com/item?id=46456797",
+    "points": 198,
+    "author": "wslh",
+    "comments_count": 129,
+    "top_comment": "It's pretty obvious what's happening here.The response needs to be forceful: seize and auction off the ships. There needs to be sufficient deterrent to actually stop this from happening.reply"
+  },
+  {
+    "rank": 4,
     "id": "46455872",
     "title": "Cameras and Lenses (2020)",
     "url": "https://ciechanow.ski/cameras-and-lenses/",
     "hn_comments_url": "https://news.ycombinator.com/item?id=46455872",
-    "points": 320,
+    "points": 326,
     "author": "sebg",
-    "comments_count": 36,
-    "top_comment": "This guy's stuff is always so awesome.Thanks for sharing it!reply"
+    "comments_count": 37,
+    "top_comment": "Incredible. Not a whiff of AI (I mean, obviously I see now because it's from 2020). Just fantastic to see clear and elegant writing again.reply"
+  },
+  {
+    "rank": 5,
+    "id": "46457770",
+    "title": "Linux is good now",
+    "url": "https://www.pcgamer.com/software/linux/im-brave-enough-to-say-it-linux-is-good-now-and-if-you-want-to-feel-like-you-actually-own-your-pc-make-2026-the-year-of-linux-on-your-desktop/",
+    "hn_comments_url": "https://news.ycombinator.com/item?id=46457770",
+    "points": 370,
+    "author": "Vinnl",
+    "comments_count": 298,
+    "top_comment": "I switched all the machines at https://lanparty.house over to Linux a couple months ago. So far, we've experienced noticeably fewer problems on Linux compared to Windows. Stability and performance are better. I can't think of one game we tried that didn't work. And wow is it nice not to have all the ads and crapware in our faces anymore.(I'm aware that Battlefield series and League of Legends won't work due to draconian anti-cheat -- but nobody in my group cares to play those I guess.)reply"
+  },
+  {
+    "rank": 6,
+    "id": "46454693",
+    "title": "Show HN: OpenWorkers \u2013 Self-hosted Cloudflare workers in Rust",
+    "url": "https://openworkers.com/introducing-openworkers",
+    "hn_comments_url": "https://news.ycombinator.com/item?id=46454693",
+    "points": 353,
+    "author": "max_lt",
+    "comments_count": 111,
+    "top_comment": null
+  },
+  {
+    "rank": 7,
+    "id": "46457027",
+    "title": "Dell's version of the DGX Spark fixes pain points",
+    "url": "https://www.jeffgeerling.com/blog/2025/dells-version-dgx-spark-fixes-pain-points",
+    "hn_comments_url": "https://news.ycombinator.com/item?id=46457027",
+    "points": 79,
+    "author": "thomasjb",
+    "comments_count": 25,
+    "top_comment": "I've got the Dell version of the DGX Spark as well, and was very impressed with the build quality overall. Like Jeff Geerling noted, the fans are super quiet. And since I don't keep it powered on continuously and mainly connect to it remotely, the LED is a nice quick check for power.But the nicest addition Dell made in my opinion is the retro 90's UNIX workstation-style wallpaper: https://jasoneckert.github.io/myblog/grace-blackwell/reply"
+  },
+  {
+    "rank": 8,
+    "id": "46458624",
+    "title": "WebAssembly as a Python Extension Platform",
+    "url": "https://nullprogram.com/blog/2026/01/01/",
+    "hn_comments_url": "https://news.ycombinator.com/item?id=46458624",
+    "points": 16,
+    "author": "ArmageddonIt",
+    "comments_count": 0,
+    "top_comment": null
   }
 ]

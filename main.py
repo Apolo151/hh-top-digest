@@ -9,12 +9,20 @@ Hacker News Top Stories Digest
 import argparse
 import csv
 import json
+import logging
 import os
+import random
 import time
 from datetime import datetime
 import html
 
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 
 HN_URL = "https://news.ycombinator.com"
@@ -26,6 +34,9 @@ def parse_args():
     parser.add_argument("--output-dir", default="output", help="Output directory")
     parser.add_argument("--headful", action="store_true", help="Run browser headful")
     parser.add_argument("--timeout", type=int, default=4000, help="Selector timeout (ms)")
+    parser.add_argument("--skip-comments", action="store_true", help="Skip fetching top comments")
+    parser.add_argument("--min-delay", type=float, default=2.0, help="Minimum delay between requests (seconds)")
+    parser.add_argument("--max-delay", type=float, default=4.0, help="Maximum delay between requests (seconds)")
     return parser.parse_args()
 
 
@@ -40,6 +51,7 @@ def extract_top_stories(page, limit, timeout):
     """
     Extract top stories from the HN front page.
     """
+    logging.info("Navigating to Hacker News front page...")
     page.goto(HN_URL)
     page.locator("tr.athing.submission").first.wait_for(timeout=timeout)
 
@@ -87,22 +99,35 @@ def extract_top_stories(page, limit, timeout):
     return stories
 
 
-def fetch_top_comment(page, comments_url, timeout):
+def fetch_top_comment(page, comments_url, timeout, retries=3, backoff_factor=2):
     """
     Fetch the first (top) comment from a story's comments page.
+    Implements retry logic with exponential backoff.
     """
     if not comments_url:
         return None
 
-    try:
-        page.goto(comments_url)
-        page.wait_for_selector(".comment", timeout=timeout)
-        comment_text = page.locator(".comment").first.text_content()
-        if not comment_text:
-            return None
-        return html.unescape(comment_text.strip())
-    except PlaywrightTimeoutError:
-        return None
+    for attempt in range(retries):
+        try:
+            logging.debug(f"Fetching comment from {comments_url} (attempt {attempt + 1}/{retries})")
+            page.goto(comments_url)
+            page.wait_for_selector(".comment", timeout=timeout)
+            comment_text = page.locator(".comment").first.text_content()
+            if not comment_text:
+                return None
+            return html.unescape(comment_text.strip())
+        except PlaywrightTimeoutError:
+            if attempt == retries - 1:
+                logging.warning(f"Failed to fetch comment from {comments_url} after {retries} attempts")
+                return None
+            wait_time = backoff_factor ** attempt
+            logging.debug(f"Timeout on attempt {attempt + 1}, waiting {wait_time}s before retry")
+            time.sleep(wait_time)
+        except Exception as e:
+            logging.error(f"Error fetching comment from {comments_url}: {e}")
+            if attempt == retries - 1:
+                return None
+            time.sleep(backoff_factor ** attempt)
 
 
 def write_outputs(stories, output_dir):
@@ -163,17 +188,35 @@ def main():
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=not args.headful)
-        page = browser.new_page()
+        
+        # Set realistic User-Agent to avoid bot detection
+        page = browser.new_page(
+            user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        )
 
         print("[*] Fetching top stories...")
         stories = extract_top_stories(page, args.limit, args.timeout)
+        
+        # Add delay after initial fetch
+        delay = random.uniform(args.min_delay, args.max_delay)
+        logging.info(f"Waiting {delay:.2f}s before fetching comments...")
+        time.sleep(delay)
 
-        print("[*] Fetching top comments...")
-        for s in stories:
-            s["top_comment"] = fetch_top_comment(
-                page, s["hn_comments_url"], args.timeout
-            )
-            time.sleep(0.6)  # polite rate limit
+        if not args.skip_comments:
+            print("[*] Fetching top comments...")
+            for i, s in enumerate(stories, 1):
+                if s["hn_comments_url"]:
+                    logging.info(f"Fetching comment {i}/{len(stories)}: {s['title'][:50]}...")
+                s["top_comment"] = fetch_top_comment(
+                    page, s["hn_comments_url"], args.timeout
+                )
+                # Random delay between requests to appear more human-like
+                if i < len(stories):
+                    delay = random.uniform(args.min_delay, args.max_delay)
+                    logging.debug(f"Waiting {delay:.2f}s before next request...")
+                    time.sleep(delay)
+        else:
+            print("[*] Skipping comment fetching (--skip-comments flag set)")
 
         browser.close()
 
